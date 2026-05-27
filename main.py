@@ -1,4 +1,3 @@
-cat > /tmp/bot_v3.py << 'PYEOF'
 import asyncio
 import logging
 import sqlite3
@@ -1000,9 +999,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-PYEOF
-cp /tmp/bot_v3.py /mnt/user-data/outputs/main.py
-echo "Qatorlar: $(wc -l < /mnt/user-data/outputs/main.py)"
-Chiqish
-
-Qatorlar: 1001
