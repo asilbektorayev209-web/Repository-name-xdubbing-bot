@@ -2,6 +2,7 @@ import asyncio
 import logging
 import sqlite3
 from datetime import datetime, timedelta
+from keep_alive import keep_alive
 
 from telegram import (
     Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup,
@@ -903,4 +904,5 @@ async def main():
         await asyncio.Event().wait()
 
 if __name__ == "__main__":
+    keep_alive()
     asyncio.run(main())
