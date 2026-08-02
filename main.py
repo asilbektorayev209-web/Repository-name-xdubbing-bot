@@ -606,7 +606,15 @@ async def do_send_post(q, context, dest):
     elif dest == "pd_all":       targets = [CHANNEL_ID, MAIN_CHANNEL] + db_user_ids()
     elif dest.startswith("pd_c"):
         cid = int(dest[4:])
-        targets = [c[2] for c in db_channels() if c[0] == cid]
+        targets = []
+        for c in db_channels():
+            if c[0] == cid:
+                try: 
+                    # ID ni to'g'ri tanish uchun uni raqamga o'giramiz
+                    targets.append(int(c[2])) 
+                except ValueError: 
+                    # Agar @username bo'lsa, o'z holicha qoldiramiz
+                    targets.append(c[2])
     else:
         targets = []
 
@@ -631,10 +639,15 @@ async def do_send_post(q, context, dest):
         except Exception as e:
             fail += 1
             err = str(e).lower()
-            if any(x in err for x in ["not enough rights", "forbidden", "admin", "chat_admin"]):
+            
+            # XATONING YECHIMI: Faqat nishon manzil rostdan ham kanal/guruh bo'lsa xabar beradi.
+            # Foydalanuvchilar bloklagan bo'lsa (forbidden), jim turib navbatdagisiga o'tadi.
+            is_channel = (isinstance(t, str) and t.startswith("@")) or (isinstance(t, int) and t < 0) or (isinstance(t, str) and t.startswith("-100"))
+            
+            if is_channel and any(x in err for x in ["not enough rights", "forbidden", "admin", "chat_admin"]):
                 try:
                     await context.bot.send_message(chat_id=aid, parse_mode="HTML",
-                        text=f"⚠️ <b>Bot bu kanalda admin emas!</b>\n<code>{t}</code>\nBotni admin qiling.")
+                        text=f"⚠️ <b>Bot bu kanalda admin emas yoki xato ID!</b>\n<code>{t}</code>\nBotni admin qiling.")
                 except Exception: pass
 
     for t in targets:
@@ -645,7 +658,6 @@ async def do_send_post(q, context, dest):
     await q.edit_message_text(
         f"✅ <b>Post yuborildi!</b>\n\n✅ Muvaffaqiyatli: {ok}\n❌ Xato: {fail}",
         parse_mode="HTML")
-
 
 # ═══════════════════════════════════════════════════
 #           MEDIA HANDLERLAR
