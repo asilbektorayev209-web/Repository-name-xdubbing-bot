@@ -15,7 +15,7 @@ from telegram.ext import (
 # ═══════════════════════════════════════════════════
 #                    SOZLAMALAR
 # ═══════════════════════════════════════════════════
-BOT_TOKEN    = "8485655940:AAG2ADspR1mAS3DncJZ03lDYWGbi_9ZZ4EI"
+BOT_TOKEN    = "8485655940:AAHTip-6je-aS_wCdpTSG4trYXHOv6cXQuw"
 OWNER_ID     = 6857570089
 CHANNEL_ID   = -1003897588293
 MAIN_CHANNEL = "@FxDubbing"
